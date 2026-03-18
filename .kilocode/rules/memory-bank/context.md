@@ -1,87 +1,78 @@
-# Active Context: Next.js Starter Template
+# Active Context: CollectorVault - Collection Inventory App
 
 ## Current State
 
-**Template Status**: ✅ Ready for development
+**Project Status**: ✅ Complete - Professional Collector Inventory App
 
-The template is a clean Next.js 16 starter with TypeScript and Tailwind CSS 4. It's ready for AI-assisted expansion to build any type of application.
+CollectorVault is a fully functional mobile-first web application for serious collectors to manage their collections, track item values, and connect with the collector community.
 
 ## Recently Completed
 
-- [x] Base Next.js 16 setup with App Router
-- [x] TypeScript configuration with strict mode
-- [x] Tailwind CSS 4 integration
-- [x] ESLint configuration
-- [x] Memory bank documentation
-- [x] Recipe system for common features
+- [x] Created SPEC.md with detailed specifications
+- [x] Set up Next.js 16 with TypeScript and Tailwind CSS 4
+- [x] Implemented Firebase authentication (email/password, Google OAuth, demo mode)
+- [x] Built Profile tab with dashboard, stats, notes, wish list, insurance info
+- [x] Built Collections tab with 15 collection types, item management, eBay price tracking
+- [x] Built Share/Community tab with social sharing, trading network, 5% kickback system
+- [x] Built Featured tab for premium users (store, listings, trending)
+- [x] Created custom dark theme design system with glass effects
+- [x] Implemented local storage persistence for demo mode
 
-## Current Structure
+## Project Structure
 
 | File/Directory | Purpose | Status |
 |----------------|---------|--------|
-| `src/app/page.tsx` | Home page | ✅ Ready |
-| `src/app/layout.tsx` | Root layout | ✅ Ready |
-| `src/app/globals.css` | Global styles | ✅ Ready |
-| `.kilocode/` | AI context & recipes | ✅ Ready |
+| `src/app/page.tsx` | Home redirect | ✅ Complete |
+| `src/app/login/page.tsx` | Firebase authentication | ✅ Complete |
+| `src/app/profile/page.tsx` | Dashboard, notes, wishlist, insurance | ✅ Complete |
+| `src/app/collections/page.tsx` | Collection & item management | ✅ Complete |
+| `src/app/share/page.tsx` | Social sharing, trading | ✅ Complete |
+| `src/app/featured/page.tsx` | Premium store/marketplace | ✅ Complete |
+| `src/app/settings/page.tsx` | App settings | ✅ Complete |
+| `src/lib/firebase.ts` | Firebase config | ✅ Complete |
+| `src/lib/types.ts` | TypeScript types | ✅ Complete |
+| `src/contexts/AuthContext.tsx` | Auth state | ✅ Complete |
+| `src/contexts/StoreContext.tsx` | Collection data | ✅ Complete |
+| `src/components/Navigation.tsx` | Bottom tab nav | ✅ Complete |
+| `SPEC.md` | Full specification | ✅ Complete |
 
-## Current Focus
+## Tech Stack
 
-The template is ready. Next steps depend on user requirements:
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS 4 with custom design system
+- **Auth**: Firebase Auth
+- **Icons**: Lucide React
+- **Charts**: Recharts
+- **State**: React Context + localStorage
 
-1. What type of application to build
-2. What features are needed
-3. Design/branding preferences
+## Premium Features
 
-## Quick Start Guide
+- Users with 3+ collections are marked as Premium
+- Premium users can access Featured tab
+- Premium features: Store creation, listings, trending page, front page placement
 
-### To add a new page:
+## Quick Start
 
-Create a file at `src/app/[route]/page.tsx`:
-```tsx
-export default function NewPage() {
-  return <div>New page content</div>;
-}
+```bash
+bun install    # Install dependencies
+bun run dev   # Start development server
+bun run build # Build for production
+bun run lint  # Check code quality
+bun run typecheck  # Type checking
 ```
-
-### To add components:
-
-Create `src/components/` directory and add components:
-```tsx
-// src/components/ui/Button.tsx
-export function Button({ children }: { children: React.ReactNode }) {
-  return <button className="px-4 py-2 bg-blue-600 text-white rounded">{children}</button>;
-}
-```
-
-### To add a database:
-
-Follow `.kilocode/recipes/add-database.md`
-
-### To add API routes:
-
-Create `src/app/api/[route]/route.ts`:
-```tsx
-import { NextResponse } from "next/server";
-
-export async function GET() {
-  return NextResponse.json({ message: "Hello" });
-}
-```
-
-## Available Recipes
-
-| Recipe | File | Use Case |
-|--------|------|----------|
-| Add Database | `.kilocode/recipes/add-database.md` | Data persistence with Drizzle + SQLite |
-
-## Pending Improvements
-
-- [ ] Add more recipes (auth, email, etc.)
-- [ ] Add example components
-- [ ] Add testing setup recipe
 
 ## Session History
 
 | Date | Changes |
 |------|---------|
 | Initial | Template created with base setup |
+| This session | Built complete CollectorVault app with auth, collections, sharing, premium marketplace |
+
+## Pending / Future Improvements
+
+- [ ] Add real Firebase Firestore for data persistence
+- [ ] Add image upload to cloud storage
+- [ ] Add payment processing for marketplace
+- [ ] Add push notifications
+- [ ] Add more chart types in dashboard
