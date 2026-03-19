@@ -98,18 +98,22 @@ export default function FeaturedPage() {
     );
   }
 
+  const handleAddListing = () => {
+    router.push('/collections');
+  };
+
   return (
     <div className="min-h-screen pb-24" style={{ background: 'var(--color-background)' }}>
       {/* Header */}
       <header className="glass sticky top-0 z-40 px-4 py-4">
         <div className="flex items-center justify-between max-w-2xl mx-auto">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center badge-premium">
-              <Crown size={16} style={{ color: '#1A1A2E' }} />
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6, #60A5FA)' }}>
+              <Crown size={16} style={{ color: 'white' }} />
             </div>
             <h1 className="text-xl font-semibold">Featured</h1>
           </div>
-          <span className="badge badge-premium">PRO</span>
+          <span className="px-3 py-1 rounded-full text-xs font-semibold" style={{ background: 'linear-gradient(135deg, #3B82F6, #60A5FA)', color: 'white' }}>PRO</span>
         </div>
       </header>
 
@@ -130,7 +134,7 @@ export default function FeaturedPage() {
                   activeTab === tab.id ? 'gradient-accent' : ''
                 }`}
                 style={{ 
-                  background: activeTab === tab.id ? 'linear-gradient(135deg, #E94560, #FF6B6B)' : 'var(--color-surface)',
+                  background: activeTab === tab.id ? 'linear-gradient(135deg, #3B82F6, #60A5FA)' : 'var(--color-surface)',
                   color: activeTab === tab.id ? 'white' : 'var(--color-text-secondary)'
                 }}
               >
@@ -162,7 +166,7 @@ export default function FeaturedPage() {
                   <p className="font-mono text-sm mt-1" style={{ color: 'var(--color-success)' }}>${totalValue.toLocaleString()} total</p>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-3 mt-4">
+                <div className="grid grid-cols-3 gap-3 mt-4">
                 <div className="p-3 rounded-lg text-center" style={{ background: 'var(--color-surface-elevated)' }}>
                   <p className="font-bold text-lg">{itemsForSale.length}</p>
                   <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>For Sale</p>
@@ -172,8 +176,8 @@ export default function FeaturedPage() {
                   <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Sold</p>
                 </div>
                 <div className="p-3 rounded-lg text-center" style={{ background: 'var(--color-surface-elevated)' }}>
-                  <p className="font-bold text-lg">5%</p>
-                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Kickback</p>
+                  <p className="font-bold text-lg">2%</p>
+                  <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Fee</p>
                 </div>
               </div>
             </div>
@@ -237,7 +241,7 @@ export default function FeaturedPage() {
                 Manage your listings and reach thousands of collectors
               </p>
               
-              <button className="btn-primary w-full flex items-center justify-center gap-2">
+              <button onClick={handleAddListing} className="btn-primary w-full flex items-center justify-center gap-2">
                 <Plus size={18} />
                 Add New Listing
               </button>
@@ -274,7 +278,7 @@ export default function FeaturedPage() {
           <section className="space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="font-semibold">Your Listings</h2>
-              <button className="btn-primary py-2 px-4 text-sm flex items-center gap-2">
+              <button onClick={handleAddListing} className="btn-primary py-2 px-4 text-sm flex items-center gap-2">
                 <Plus size={16} />
                 New Listing
               </button>
@@ -287,7 +291,7 @@ export default function FeaturedPage() {
                 <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
                   Start selling items from your collection
                 </p>
-                <button className="btn-primary inline-flex items-center gap-2">
+                <button onClick={handleAddListing} className="btn-primary inline-flex items-center gap-2">
                   <Plus size={18} />
                   Create First Listing
                 </button>
@@ -296,7 +300,13 @@ export default function FeaturedPage() {
               itemsForSale.map(item => (
                 <div key={item.id} className="card p-4">
                   <div className="flex gap-4">
-                    <div className="w-20 h-20 rounded-lg" style={{ background: 'var(--color-surface-elevated)' }}></div>
+                    {item.photos && item.photos.length > 0 ? (
+                      <img src={item.photos[0]} alt="" className="w-20 h-20 rounded-lg object-cover" />
+                    ) : (
+                      <div className="w-20 h-20 rounded-lg flex items-center justify-center" style={{ background: 'var(--color-surface-elevated)' }}>
+                        <ShoppingBag size={24} style={{ color: 'var(--color-text-secondary)' }} />
+                      </div>
+                    )}
                     <div className="flex-1">
                       <h4 className="font-semibold">{item.name}</h4>
                       <p className="font-mono text-lg mt-1" style={{ color: 'var(--color-success)' }}>

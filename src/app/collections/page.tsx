@@ -32,6 +32,8 @@ export default function CollectionsPage() {
     isForSale: false, salePrice: 0, categoryAttributes: {} as Record<string, string>
   });
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [editingSale, setEditingSale] = useState<string | null>(null);
+  const [salePrice, setSalePrice] = useState('');
 
   if (!user) {
     return null;
@@ -73,6 +75,22 @@ export default function CollectionsPage() {
       ...prev,
       photos: prev.photos.filter((_, i) => i !== index)
     }));
+  };
+
+  const handleToggleSale = (item: any) => {
+    if (item.isForSale) {
+      updateItem(item.id, { isForSale: false, salePrice: 0 });
+    } else {
+      setEditingSale(item.id);
+      setSalePrice(item.salePrice?.toString() || item.estimatedValue?.toString() || '');
+    }
+  };
+
+  const handleSaveSale = (itemId: string) => {
+    const price = parseFloat(salePrice) || 0;
+    updateItem(itemId, { isForSale: true, salePrice: price });
+    setEditingSale(null);
+    setSalePrice('');
   };
 
   const handleAddItem = (collectionId: string) => {
@@ -327,6 +345,36 @@ export default function CollectionsPage() {
                           <ExternalLink size={12} />
                           Check eBay
                         </a>
+
+                        {/* Sale Section */}
+                        <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
+                          {editingSale === item.id ? (
+                            <div className="flex items-center gap-2">
+                              <input
+                                type="number"
+                                value={salePrice}
+                                onChange={(e) => setSalePrice(e.target.value)}
+                                className="input py-1 text-sm flex-1"
+                                placeholder="Sale price"
+                              />
+                              <button onClick={() => handleSaveSale(item.id)} className="btn-primary py-1 px-3 text-xs">Save</button>
+                              <button onClick={() => setEditingSale(null)} className="btn-secondary py-1 px-3 text-xs">Cancel</button>
+                            </div>
+                          ) : item.isForSale ? (
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <span className="px-2 py-1 rounded text-xs font-semibold" style={{ background: 'var(--color-success)', color: 'white' }}>FOR SALE</span>
+                                <span className="ml-2 font-mono text-sm" style={{ color: 'var(--color-success)' }}>${item.salePrice?.toLocaleString()}</span>
+                              </div>
+                              <button onClick={() => handleToggleSale(item)} className="text-xs" style={{ color: 'var(--color-error)' }}>Remove</button>
+                            </div>
+                          ) : (
+                            <button onClick={() => handleToggleSale(item)} className="btn-primary w-full py-2 text-sm flex items-center justify-center gap-2">
+                              <DollarSign size={14} />
+                              List for Sale
+                            </button>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
