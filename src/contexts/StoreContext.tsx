@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Collection, Item, WishListItem, UserProfile, InsuranceInfo, CollectionType, AdminMessage, AppSettings } from '@/lib/types';
+import { auth } from '@/lib/firebase';
 
 const ADMIN_EMAIL = 'leonptucker3886@gmail.com';
 
@@ -237,20 +238,23 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
 
   const isPremium = () => {
+    if (isAdmin()) return true;
     return userProfile?.isPremium || false;
   };
 
   const canAddCollection = () => {
-    if (userProfile?.isPremium) return true;
+    if (userProfile?.isPremium || isAdmin()) return true;
     return collections.length < 2;
   };
 
   const canSell = (): boolean => {
+    if (isAdmin()) return true;
     return !!(userProfile?.isPremium && userProfile?.isSeller && userProfile?.sellerAgreementAccepted);
   };
 
   const isAdmin = (): boolean => {
-    return userProfile?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || userProfile?.isAdmin || false;
+    const currentEmail = auth.currentUser?.email?.toLowerCase() || userProfile?.email?.toLowerCase();
+    return currentEmail === ADMIN_EMAIL.toLowerCase() || userProfile?.isAdmin || false;
   };
 
   const sendMessage = (userId: string, message: string) => {

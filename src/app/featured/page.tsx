@@ -85,7 +85,7 @@ export default function FeaturedPage() {
 
           <button className="btn-primary w-full flex items-center justify-center gap-2 py-4">
             <Zap size={20} />
-            Upgrade Now - $9.99/month
+            Upgrade Now - $15/year
           </button>
 
           <p className="text-xs mt-4 text-center" style={{ color: 'var(--color-text-secondary)' }}>
