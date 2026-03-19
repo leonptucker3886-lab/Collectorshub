@@ -53,6 +53,7 @@ interface StoreContextType {
   unbanUser: (userId: string) => void;
   updateAppSettings: (settings: Partial<AppSettings>) => void;
   resetAppSettings: () => void;
+  registerUser: (email: string, displayName: string, uid: string) => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -286,6 +287,37 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     setAppSettings(DEFAULT_APP_SETTINGS);
   };
 
+  const registerUser = (email: string, displayName: string, uid: string) => {
+    const existingUser = allUsers.find(u => u.uid === uid);
+    if (!existingUser) {
+      const newUser: UserProfile = {
+        uid,
+        email,
+        displayName: displayName || email.split('@')[0],
+        username: email.split('@')[0],
+        photoURL: '',
+        isAnonymous: false,
+        isPremium: false,
+        isSeller: false,
+        sellerAgreementAccepted: false,
+        sellerSince: null,
+        isAdmin: email.toLowerCase() === ADMIN_EMAIL.toLowerCase(),
+        isBanned: false,
+        banReason: '',
+        bannedAt: null,
+        createdAt: new Date(),
+        insuranceInfo: {
+          policyNumber: '',
+          coverageAmount: 0,
+          provider: '',
+          expirationDate: '',
+          notes: ''
+        }
+      };
+      setAllUsers(prev => [...prev, newUser]);
+    }
+  };
+
   const exportData = () => {
     return JSON.stringify({ collections, items, wishList, userProfile, notes }, null, 2);
   };
@@ -323,7 +355,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       banUser,
       unbanUser,
       updateAppSettings,
-      resetAppSettings
+      resetAppSettings,
+      registerUser
     }}>
       {children}
     </StoreContext.Provider>

@@ -28,21 +28,6 @@ export default function FeaturedPage() {
   const totalValue = getTotalValue();
   const itemsForSale = items.filter(i => i.isForSale);
 
-  const featuredCollectors = [
-    { id: 1, name: 'RareFinds_Larry', collections: 12, avatar: '🦊', value: '$2.4M' },
-    { id: 2, name: 'VintageQueen', collections: 8, avatar: '👑', value: '$890K' },
-    { id: 3, name: 'CardMaster99', collections: 15, avatar: '🃏', value: '$1.2M' },
-    { id: 4, name: 'CoinCollector', collections: 6, avatar: '🪙', value: '$540K' },
-    { id: 5, name: 'TimeKeeper', collections: 4, avatar: '⌚', value: '$1.8M' },
-  ];
-
-  const trendingListings = [
-    { id: 1, name: 'Charizard Holo 1st Edition', price: 15000, seller: 'CardMaster99', type: 'pokemon' },
-    { id: 2, name: 'Rolex Submariner 1969', price: 45000, seller: 'TimeKeeper', type: 'watches' },
-    { id: 3, name: 'Black Lotus Alpha', price: 28000, seller: 'MTG_Pro', type: 'magic' },
-    { id: 4, name: 'Penny Black Stamp', price: 8500, seller: 'StampLover', type: 'stamps' },
-  ];
-
   if (!premium) {
     return (
       <div className="min-h-screen pb-24 flex flex-col" style={{ background: 'var(--color-background)' }}>
@@ -184,49 +169,70 @@ export default function FeaturedPage() {
 
             {/* Featured Collectors */}
             <div className="card p-4 animate-fade-in" style={{ animationDelay: '0.1s' }}>
-              <h2 className="font-semibold mb-4">Top Collectors</h2>
-              <div className="space-y-3">
-                {featuredCollectors.map((collector, idx) => (
-                  <div key={collector.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--color-surface-elevated)' }}>
-                    <span className="text-2xl">{collector.avatar}</span>
-                    <div className="flex-1">
-                      <p className="font-medium">{collector.name}</p>
-                      <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                        {collector.collections} collections
-                      </p>
-                    </div>
-                    <span className="font-mono text-sm" style={{ color: 'var(--color-success)' }}>{collector.value}</span>
-                    <button className="p-2 rounded-lg" style={{ background: 'var(--color-surface)' }}>
-                      <Eye size={16} style={{ color: 'var(--color-text-secondary)' }} />
-                    </button>
-                  </div>
-                ))}
-              </div>
+              <h2 className="font-semibold mb-4">Your Collections</h2>
+              {collections.length === 0 ? (
+                <p className="text-sm text-center py-4" style={{ color: 'var(--color-text-secondary)' }}>
+                  Create your first collection to get started!
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {collections.slice(0, 5).map((col, idx) => {
+                    const typeInfo = COLLECTION_TYPES.find(t => t.id === col.type);
+                    return (
+                      <div key={col.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--color-surface-elevated)' }}>
+                        <span className="text-2xl">{typeInfo?.icon || '📦'}</span>
+                        <div className="flex-1">
+                          <p className="font-medium">{col.name}</p>
+                          <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
+                            {col.itemCount} items
+                          </p>
+                        </div>
+                        <span className="font-mono text-sm" style={{ color: 'var(--color-success)' }}>${col.totalValue?.toLocaleString()}</span>
+                        <button className="p-2 rounded-lg" style={{ background: 'var(--color-surface)' }}>
+                          <Eye size={16} style={{ color: 'var(--color-text-secondary)' }} />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* Trending Listings */}
             <div className="card p-4 animate-fade-in" style={{ animationDelay: '0.2s' }}>
               <div className="flex items-center justify-between mb-4">
-                <h2 className="font-semibold">Trending Listings</h2>
+                <h2 className="font-semibold">Marketplace Listings</h2>
                 <TrendingUp size={18} style={{ color: 'var(--color-success)' }} />
               </div>
-              <div className="space-y-3">
-                {trendingListings.map(item => {
-                  const typeInfo = COLLECTION_TYPES.find(t => t.id === item.type);
-                  return (
-                    <div key={item.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--color-surface-elevated)' }}>
-                      <div className="text-2xl">{typeInfo?.icon || '📦'}</div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm truncate">{item.name}</p>
-                        <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>by {item.seller}</p>
+              {itemsForSale.length === 0 ? (
+                <p className="text-sm text-center py-4" style={{ color: 'var(--color-text-secondary)' }}>
+                  No items for sale yet. List items from your collections!
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {itemsForSale.slice(0, 10).map(item => {
+                    const collection = collections.find(c => c.id === item.collectionId);
+                    return (
+                      <div key={item.id} className="flex items-center gap-3 p-3 rounded-lg" style={{ background: 'var(--color-surface-elevated)' }}>
+                        {item.photos && item.photos.length > 0 ? (
+                          <img src={item.photos[0]} alt="" className="w-12 h-12 rounded object-cover" />
+                        ) : (
+                          <div className="w-12 h-12 rounded flex items-center justify-center">
+                            <ShoppingBag size={20} style={{ color: 'var(--color-text-secondary)' }} />
+                          </div>
+                        )}
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm truncate">{item.name}</p>
+                          <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>{collection?.name || 'Collection'}</p>
+                        </div>
+                        <span className="font-mono font-semibold" style={{ color: 'var(--color-success)' }}>
+                          ${item.salePrice?.toLocaleString()}
+                        </span>
                       </div>
-                      <span className="font-mono font-semibold" style={{ color: 'var(--color-success)' }}>
-                        ${item.price.toLocaleString()}
-                      </span>
-                    </div>
-                  );
-                })}
-              </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           </section>
         )}

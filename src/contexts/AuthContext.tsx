@@ -11,6 +11,7 @@ import {
   signOut as firebaseSignOut
 } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
+import { useStore } from './StoreContext';
 
 interface AuthContextType {
   user: User | null;
@@ -26,15 +27,19 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const { registerUser } = useStore();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
+      if (user?.email) {
+        registerUser(user.email, user.displayName || '', user.uid);
+      }
       setLoading(false);
     });
 
     return () => unsubscribe();
-  }, []);
+  }, [registerUser]);
 
   const signIn = async (email: string, password: string) => {
     await signInWithEmailAndPassword(auth, email, password);
