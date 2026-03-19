@@ -40,7 +40,10 @@ export default function CollectionsPage() {
   const canAdd = canAddCollection();
 
   const handleCreateCollection = () => {
-    if (newCollection.name && canAdd) {
+    if (!canAdd) {
+      return;
+    }
+    if (newCollection.name) {
       addCollection({
         userId: user?.uid || '',
         ...newCollection
@@ -82,6 +85,7 @@ export default function CollectionsPage() {
           <button 
             onClick={() => setShowAddCollection(true)}
             className="btn-primary py-2 px-4 text-sm flex items-center gap-2"
+            disabled={!canAdd}
           >
             <Plus size={18} />
             Add
@@ -368,8 +372,13 @@ export default function CollectionsPage() {
               </div>
 
               <button onClick={handleCreateCollection} className="btn-primary w-full">
-                Create Collection
+                {canAdd ? 'Create Collection' : 'Collection Limit Reached'}
               </button>
+              {!canAdd && (
+                <p className="text-xs text-center mt-2" style={{ color: 'var(--color-warning)' }}>
+                  Free plan: 2 collections max. Upgrade to Premium for unlimited.
+                </p>
+              )}
             </div>
           </div>
         </div>
