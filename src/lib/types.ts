@@ -63,6 +63,10 @@ export interface UserProfile {
   isSeller: boolean;
   sellerAgreementAccepted: boolean;
   sellerSince: Date | null;
+  isAdmin: boolean;
+  isBanned: boolean;
+  banReason: string;
+  bannedAt: Date | null;
   createdAt: Date;
   insuranceInfo: InsuranceInfo;
 }
@@ -83,6 +87,29 @@ export interface WishListItem {
   estimatedPrice: number;
   notes: string;
   createdAt: Date;
+}
+
+export interface AdminMessage {
+  id: string;
+  userId: string;
+  fromAdmin: boolean;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+}
+
+export interface AppSettings {
+  primaryColor: string;
+  accentColor: string;
+  backgroundColor: string;
+  surfaceColor: string;
+  textPrimary: string;
+  textSecondary: string;
+  successColor: string;
+  warningColor: string;
+  errorColor: string;
+  logo: string;
+  siteName: string;
 }
 
 export interface CollectionTypeInfo {

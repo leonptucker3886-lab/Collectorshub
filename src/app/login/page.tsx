@@ -185,12 +185,12 @@ export default function LoginPage() {
           <div className="mt-4 p-4 rounded-lg" style={{ background: 'rgba(233, 69, 96, 0.1)', border: '1px solid var(--color-accent)' }}>
             <div className="flex items-center justify-center gap-2 mb-2">
               <Crown size={16} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>Free Plan</span>
+              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>Pricing</span>
             </div>
             <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>
               Up to 2 collections free<br/>
-              Premium: Unlimited collections + Sell on Marketplace<br/>
-              $5/month seller agreement + 5% company commission
+              Premium: $15/year - Unlimited collections<br/>
+              Seller: $60/year - Sell on Marketplace + 2% commission
             </p>
           </div>
         </div>

@@ -1,7 +1,23 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Collection, Item, WishListItem, UserProfile, InsuranceInfo, CollectionType } from '@/lib/types';
+import { Collection, Item, WishListItem, UserProfile, InsuranceInfo, CollectionType, AdminMessage, AppSettings } from '@/lib/types';
+
+const ADMIN_EMAIL = 'leonptucker3886@gmail.com';
+
+const DEFAULT_APP_SETTINGS: AppSettings = {
+  primaryColor: '#E94560',
+  accentColor: '#FF6B6B',
+  backgroundColor: '#0F0F1A',
+  surfaceColor: '#1A1A2E',
+  textPrimary: '#FFFFFF',
+  textSecondary: '#A0A0B0',
+  successColor: '#4ADE80',
+  warningColor: '#FFB800',
+  errorColor: '#EF4444',
+  logo: '',
+  siteName: 'CollectorVault'
+};
 
 interface StoreContextType {
   collections: Collection[];
@@ -9,6 +25,9 @@ interface StoreContextType {
   wishList: WishListItem[];
   userProfile: UserProfile | null;
   notes: string;
+  messages: AdminMessage[];
+  appSettings: AppSettings;
+  allUsers: UserProfile[];
   addCollection: (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>) => boolean;
   updateCollection: (id: string, updates: Partial<Collection>) => void;
   deleteCollection: (id: string) => void;
@@ -24,9 +43,15 @@ interface StoreContextType {
   getTotalValue: () => number;
   getTotalItems: () => number;
   isPremium: () => boolean;
+  isAdmin: () => boolean;
   canAddCollection: () => boolean;
   canSell: () => boolean;
   exportData: () => string;
+  sendMessage: (userId: string, message: string) => void;
+  banUser: (userId: string, reason: string) => void;
+  unbanUser: (userId: string) => void;
+  updateAppSettings: (settings: Partial<AppSettings>) => void;
+  resetAppSettings: () => void;
 }
 
 const StoreContext = createContext<StoreContextType | undefined>(undefined);
@@ -35,7 +60,7 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export function StoreProvider({ children }: { children: ReactNode }) {
   const loadFromStorage = () => {
-    if (typeof window === 'undefined') return { collections: [], items: [], wishList: [], userProfile: null, notes: '' };
+    if (typeof window === 'undefined') return { collections: [], items: [], wishList: [], userProfile: null, notes: '', messages: [], appSettings: DEFAULT_APP_SETTINGS, allUsers: [] };
     const stored = localStorage.getItem('collectorVault_data');
     if (stored) {
       const data = JSON.parse(stored);
@@ -44,10 +69,13 @@ export function StoreProvider({ children }: { children: ReactNode }) {
         items: data.items || [],
         wishList: data.wishList || [],
         userProfile: data.userProfile || null,
-        notes: data.notes || ''
+        notes: data.notes || '',
+        messages: data.messages || [],
+        appSettings: data.appSettings || DEFAULT_APP_SETTINGS,
+        allUsers: data.allUsers || []
       };
     }
-    return { collections: [], items: [], wishList: [], userProfile: null, notes: '' };
+    return { collections: [], items: [], wishList: [], userProfile: null, notes: '', messages: [], appSettings: DEFAULT_APP_SETTINGS, allUsers: [] };
   };
 
   const initialData = loadFromStorage();
@@ -56,11 +84,14 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   const [wishList, setWishList] = useState<WishListItem[]>(initialData.wishList);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(initialData.userProfile);
   const [notes, setNotes] = useState(initialData.notes);
+  const [messages, setMessages] = useState<AdminMessage[]>(initialData.messages);
+  const [appSettings, setAppSettings] = useState(initialData.appSettings);
+  const [allUsers, setAllUsers] = useState<UserProfile[]>(initialData.allUsers);
 
   useEffect(() => {
-    const data = { collections, items, wishList, userProfile, notes };
+    const data = { collections, items, wishList, userProfile, notes, messages, appSettings, allUsers };
     localStorage.setItem('collectorVault_data', JSON.stringify(data));
-  }, [collections, items, wishList, userProfile, notes]);
+  }, [collections, items, wishList, userProfile, notes, messages, appSettings, allUsers]);
 
   const addCollection = (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>): boolean => {
     if (!canAddCollection()) {
@@ -158,7 +189,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
 
   const updateUserProfile = (updates: Partial<UserProfile>) => {
-    setUserProfile(prev => prev ? { ...prev, ...updates } : {
+    const isAdminEmail = updates.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    setUserProfile(prev => prev ? { ...prev, ...updates, isAdmin: isAdminEmail ? true : (prev.isAdmin || false) } : {
       uid: '',
       email: '',
       displayName: '',
@@ -169,6 +201,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       isSeller: false,
       sellerAgreementAccepted: false,
       sellerSince: null,
+      isAdmin: isAdminEmail,
+      isBanned: false,
+      banReason: '',
+      bannedAt: null,
       createdAt: new Date(),
       insuranceInfo: {
         policyNumber: '',
@@ -213,6 +249,42 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     return !!(userProfile?.isPremium && userProfile?.isSeller && userProfile?.sellerAgreementAccepted);
   };
 
+  const isAdmin = (): boolean => {
+    return userProfile?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase() || userProfile?.isAdmin || false;
+  };
+
+  const sendMessage = (userId: string, message: string) => {
+    const newMessage: AdminMessage = {
+      id: generateId(),
+      userId,
+      fromAdmin: isAdmin(),
+      message,
+      read: false,
+      createdAt: new Date()
+    };
+    setMessages(prev => [...prev, newMessage]);
+  };
+
+  const banUser = (userId: string, reason: string) => {
+    setAllUsers(prev => prev.map(u => 
+      u.uid === userId ? { ...u, isBanned: true, banReason: reason, bannedAt: new Date() } : u
+    ));
+  };
+
+  const unbanUser = (userId: string) => {
+    setAllUsers(prev => prev.map(u => 
+      u.uid === userId ? { ...u, isBanned: false, banReason: '', bannedAt: null } : u
+    ));
+  };
+
+  const updateAppSettings = (settings: Partial<AppSettings>) => {
+    setAppSettings((prev: AppSettings) => ({ ...prev, ...settings }));
+  };
+
+  const resetAppSettings = () => {
+    setAppSettings(DEFAULT_APP_SETTINGS);
+  };
+
   const exportData = () => {
     return JSON.stringify({ collections, items, wishList, userProfile, notes }, null, 2);
   };
@@ -239,9 +311,18 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       getTotalValue,
       getTotalItems,
       isPremium,
+      isAdmin,
       canAddCollection,
       canSell,
-      exportData
+      exportData,
+      messages,
+      appSettings,
+      allUsers,
+      sendMessage,
+      banUser,
+      unbanUser,
+      updateAppSettings,
+      resetAppSettings
     }}>
       {children}
     </StoreContext.Provider>

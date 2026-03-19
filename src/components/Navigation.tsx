@@ -2,12 +2,12 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, FolderOpen, Share2, Star, Settings, Shield } from 'lucide-react';
+import { User, FolderOpen, Share2, Star, Settings, Shield, Settings2 } from 'lucide-react';
 import { useStore } from '@/contexts/StoreContext';
 
 export default function Navigation() {
   const pathname = usePathname();
-  const { isPremium } = useStore();
+  const { isPremium, isAdmin } = useStore();
 
   const tabs = [
     { href: '/profile', icon: User, label: 'Profile' },
@@ -15,6 +15,10 @@ export default function Navigation() {
     { href: '/share', icon: Share2, label: 'Share' },
     { href: '/featured', icon: Star, label: 'Featured', premium: true },
     { href: '/settings', icon: Settings, label: 'Settings' },
+  ];
+
+  const adminTabs = [
+    { href: '/admin', icon: Settings2, label: 'Admin' },
   ];
 
   return (
@@ -49,6 +53,21 @@ export default function Navigation() {
             {tab.premium && isPremium() && (
               <span className="badge badge-premium" style={{ fontSize: '8px', padding: '2px 6px', position: 'absolute', top: 2, right: '15%' }}>PRO</span>
             )}
+          </Link>
+        );
+      })}
+      {isAdmin() && adminTabs.map(tab => {
+        const isActive = pathname.startsWith(tab.href);
+        const Icon = tab.icon;
+        return (
+          <Link 
+            key={tab.href} 
+            href={tab.href} 
+            className={`tab-item ${isActive ? 'active' : ''}`}
+            style={{ borderColor: 'var(--color-accent)' }}
+          >
+            <Icon />
+            <span>{tab.label}</span>
           </Link>
         );
       })}
