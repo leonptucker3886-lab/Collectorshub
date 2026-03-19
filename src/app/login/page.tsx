@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield, Mail, Lock, Eye, EyeOff, ArrowRight, Users, TrendingUp, ShoppingBag, Crown } from 'lucide-react';
+import { Shield, Eye, EyeOff, ArrowRight, Users, TrendingUp, ShoppingBag, Crown } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -69,7 +69,7 @@ export default function LoginPage() {
         <div className="grid grid-cols-3 gap-4 mb-10 w-full max-w-md">
           <div className="card p-4 text-center">
             <Users size={24} style={{ color: 'var(--color-accent)', margin: '0 auto 8px' }} />
-            <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Community</span>
+            <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Organize</span>
           </div>
           <div className="card p-4 text-center">
             <TrendingUp size={24} style={{ color: 'var(--color-success)', margin: '0 auto 8px' }} />
@@ -77,7 +77,7 @@ export default function LoginPage() {
           </div>
           <div className="card p-4 text-center">
             <ShoppingBag size={24} style={{ color: 'var(--color-warning)', margin: '0 auto 8px' }} />
-            <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Marketplace</span>
+            <span className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Sell</span>
           </div>
         </div>
 
@@ -97,28 +97,24 @@ export default function LoginPage() {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
                 <label className="label">Email</label>
-                <div className="relative">
-                  <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 z-10" style={{ color: 'var(--color-text-secondary)' }} />
-                  <input
-                    type="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="input pl-10"
-                    placeholder="your@email.com"
-                    required
-                  />
-                </div>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="input"
+                  placeholder="your@email.com"
+                  required
+                />
               </div>
               
               <div>
                 <label className="label">Password</label>
                 <div className="relative">
-                  <Lock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 z-10" style={{ color: 'var(--color-text-secondary)' }} />
                   <input
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="input pl-10 pr-12"
+                    className="input pr-12"
                     placeholder="••••••••"
                     required
                     minLength={6}
@@ -194,7 +190,7 @@ export default function LoginPage() {
             <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>
               Up to 2 collections free<br/>
               Premium: Unlimited collections + Sell on Marketplace<br/>
-              $5/month sellers agreement + 5% commission
+              $5/month seller agreement + 5% company commission
             </p>
           </div>
         </div>
