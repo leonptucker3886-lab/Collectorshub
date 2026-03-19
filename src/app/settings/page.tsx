@@ -6,8 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useStore } from '@/contexts/StoreContext';
 import Navigation from '@/components/Navigation';
 import { 
-  Settings, User, Bell, Shield, HelpCircle, LogOut, 
-  Trash2, Download, Moon, Globe, DollarSign, ChevronRight
+  Settings, User, Trash2, Download, LogOut, ChevronRight, Shield
 } from 'lucide-react';
 
 export default function SettingsPage() {
@@ -49,16 +48,6 @@ export default function SettingsPage() {
       title: 'Account',
       items: [
         { icon: User, label: 'Profile', value: '', onClick: () => router.push('/profile') },
-        { icon: Bell, label: 'Notifications', value: 'On', onClick: () => {} },
-        { icon: Shield, label: 'Privacy', value: '', onClick: () => {} },
-      ]
-    },
-    {
-      title: 'Preferences',
-      items: [
-        { icon: Globe, label: 'Language', value: 'English', onClick: () => {} },
-        { icon: DollarSign, label: 'Currency', value: 'USD', onClick: () => {} },
-        { icon: Moon, label: 'Dark Mode', value: 'On', onClick: () => {} },
       ]
     },
     {
@@ -71,7 +60,6 @@ export default function SettingsPage() {
     {
       title: 'Support',
       items: [
-        { icon: HelpCircle, label: 'Help Center', value: '', onClick: () => {} },
         { icon: LogOut, label: 'Sign Out', value: '', onClick: handleSignOut },
       ]
     }
@@ -144,7 +132,7 @@ export default function SettingsPage() {
         {/* App Info */}
         <div className="text-center py-6">
           <div className="flex items-center justify-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #E94560, #FF6B6B)' }}>
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #3B82F6, #60A5FA)' }}>
               <Shield size={16} />
             </div>
             <span className="font-semibold">CollectorVault</span>
