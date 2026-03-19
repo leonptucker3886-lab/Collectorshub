@@ -54,14 +54,14 @@ export default function LoginPage() {
       {/* Logo Section */}
       <div className="flex-1 flex flex-col items-center justify-center px-6 pt-12 pb-8">
         <div className="text-center mb-10 animate-fade-in">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6" style={{ background: 'linear-gradient(135deg, #E94560, #FF6B6B)' }}>
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl mb-6" style={{ background: 'linear-gradient(135deg, #3B82F6, #60A5FA)' }}>
             <Shield size={40} strokeWidth={1.5} />
           </div>
-          <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'Outfit, sans-serif', background: 'linear-gradient(135deg, #E94560, #FF6B6B)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+          <h1 className="text-4xl font-bold mb-3" style={{ fontFamily: 'Outfit, sans-serif', background: 'linear-gradient(135deg, #3B82F6, #60A5FA)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             CollectorVault
           </h1>
           <p className="text-lg" style={{ color: 'var(--color-text-secondary)' }}>
-            Collection Inventory & Tracking System
+            Track, Manage & Sell Your Collections
           </p>
         </div>
 
@@ -181,16 +181,10 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Pricing Info */}
-          <div className="mt-4 p-4 rounded-lg" style={{ background: 'rgba(233, 69, 96, 0.1)', border: '1px solid var(--color-accent)' }}>
-            <div className="flex items-center justify-center gap-2 mb-2">
-              <Crown size={16} style={{ color: 'var(--color-accent)' }} />
-              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>Pricing</span>
-            </div>
+          {/* Features Info */}
+          <div className="mt-4 p-4 rounded-lg" style={{ background: 'var(--color-surface)', border: '1px solid var(--color-border)' }}>
             <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>
-              Up to 2 collections free<br/>
-              Premium: $15/year - Unlimited collections<br/>
-              Seller: $60/year - Sell on Marketplace + 2% commission
+              Free to use - Track your collections, list items for sale, connect with collectors
             </p>
           </div>
         </div>

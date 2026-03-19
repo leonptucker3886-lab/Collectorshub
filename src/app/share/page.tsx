@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useStore } from '@/contexts/StoreContext';
 import Navigation from '@/components/Navigation';
 import { 
-  Share2, Link, Users, MessageCircle, Twitter, Instagram, 
+  Share2, Link, Users, MessageCircle, Instagram, 
   Facebook, Percent, ArrowRight, Copy, Check, Zap,
   TrendingUp, ShoppingCart, Handshake, ShoppingBag
 } from 'lucide-react';
@@ -35,7 +35,7 @@ export default function SharePage() {
   };
 
   const socialPlatforms = [
-    { id: 'twitter', name: 'Twitter', icon: Twitter, color: '#1DA1F2' },
+    { id: 'x', name: 'X', icon: (props: any) => <svg viewBox="0 0 24 24" width="20" height="20" {...props}><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>, color: '#000000' },
     { id: 'instagram', name: 'Instagram', icon: Instagram, color: '#E4405F' },
     { id: 'facebook', name: 'Facebook', icon: Facebook, color: '#1877F2' },
   ];
@@ -168,25 +168,24 @@ export default function SharePage() {
               <Percent size={20} style={{ color: '#1A1A2E' }} />
             </div>
             <div>
-              <h2 className="text-lg font-semibold">5% Trading Kickback</h2>
-              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Earn while you trade</p>
+              <h2 className="text-lg font-semibold">2% Platform Fee</h2>
+              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Low fees on all sales</p>
             </div>
           </div>
 
           <p className="text-sm mb-4" style={{ color: 'var(--color-text-secondary)' }}>
-            When you complete trades or sales through our trading network, 
-            you&apos;ll earn a 5% kickback on every transaction. It&apos;s our way of 
-            rewarding active collectors in our community.
+            When you sell items through our marketplace, a small 2% platform fee 
+            helps support the platform. Keep more of your earnings.
           </p>
 
           <div className="grid grid-cols-2 gap-3">
             <div className="p-3 rounded-lg text-center" style={{ background: 'var(--color-surface-elevated)' }}>
-              <p className="text-2xl font-bold text-gradient">5%</p>
-              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Kickback Rate</p>
+              <p className="text-2xl font-bold text-gradient">2%</p>
+              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Platform Fee</p>
             </div>
             <div className="p-3 rounded-lg text-center" style={{ background: 'var(--color-surface-elevated)' }}>
-              <p className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>$0</p>
-              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>Earned So Far</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--color-success)' }}>98%</p>
+              <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>You Keep</p>
             </div>
           </div>
         </section>

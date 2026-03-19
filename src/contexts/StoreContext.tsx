@@ -238,18 +238,15 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
 
   const isPremium = () => {
-    if (isAdmin()) return true;
-    return userProfile?.isPremium || false;
+    return true;
   };
 
   const canAddCollection = () => {
-    if (userProfile?.isPremium || isAdmin()) return true;
-    return collections.length < 2;
+    return true;
   };
 
   const canSell = (): boolean => {
-    if (isAdmin()) return true;
-    return !!(userProfile?.isPremium && userProfile?.isSeller && userProfile?.sellerAgreementAccepted);
+    return true;
   };
 
   const isAdmin = (): boolean => {
