@@ -317,8 +317,8 @@ export default function CollectionsPage() {
 
       {/* Add Collection Modal */}
       {showAddCollection && (
-        <div className="modal-backdrop" onClick={() => setShowAddCollection(false)}>
-          <div className="modal-content animate-slide-up" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[200] flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.7)' }} onClick={() => setShowAddCollection(false)}>
+          <div className="w-full max-w-lg rounded-t-2xl p-6 animate-slide-up" style={{ background: 'var(--color-surface)' }} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold">New Collection</h2>
               <button onClick={() => setShowAddCollection(false)}>
@@ -371,14 +371,9 @@ export default function CollectionsPage() {
                 />
               </div>
 
-              <button onClick={handleCreateCollection} className="btn-primary w-full">
-                {canAdd ? 'Create Collection' : 'Collection Limit Reached'}
+              <button type="button" onClick={handleCreateCollection} className="btn-primary w-full">
+                Create Collection
               </button>
-              {!canAdd && (
-                <p className="text-xs text-center mt-2" style={{ color: 'var(--color-warning)' }}>
-                  Free plan: 2 collections max. Upgrade to Premium for unlimited.
-                </p>
-              )}
             </div>
           </div>
         </div>
@@ -386,8 +381,8 @@ export default function CollectionsPage() {
 
       {/* Add Item Modal */}
       {showAddItem && (
-        <div className="modal-backdrop" onClick={() => setShowAddItem(null)}>
-          <div className="modal-content animate-slide-up" onClick={e => e.stopPropagation()}>
+        <div className="fixed inset-0 z-[200] flex items-end justify-center" style={{ background: 'rgba(0,0,0,0.7)' }} onClick={() => setShowAddItem(null)}>
+          <div className="w-full max-w-lg rounded-t-2xl p-6 animate-slide-up" style={{ background: 'var(--color-surface)' }} onClick={e => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-xl font-semibold">Add Item</h2>
               <button onClick={() => setShowAddItem(null)}>
