@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/contexts/AuthContext';
-import { Shield, Mail, Lock, Eye, EyeOff, Sparkles, ArrowRight, Users, TrendingUp, ShoppingBag } from 'lucide-react';
+import { Shield, Mail, Lock, Eye, EyeOff, ArrowRight, Users, TrendingUp, ShoppingBag, Crown } from 'lucide-react';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -13,7 +13,7 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const { signIn, signUp, signInWithGoogle, setIsDemo } = useAuth();
+  const { signIn, signUp, signInWithGoogle } = useAuth();
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -47,11 +47,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleDemo = () => {
-    setIsDemo(true);
-    router.push('/profile');
   };
 
   return (
@@ -190,17 +185,18 @@ export default function LoginPage() {
             </p>
           </div>
 
-          {/* Demo Button */}
-          <button
-            onClick={handleDemo}
-            className="w-full mt-4 py-3 text-sm font-medium rounded-lg transition-all hover:opacity-80"
-            style={{ border: '1px dashed var(--color-border)', color: 'var(--color-text-secondary)' }}
-          >
-            <span className="inline-flex items-center gap-2">
-              <Sparkles size={16} />
-              Try Demo Mode
-            </span>
-          </button>
+          {/* Pricing Info */}
+          <div className="mt-4 p-4 rounded-lg" style={{ background: 'rgba(233, 69, 96, 0.1)', border: '1px solid var(--color-accent)' }}>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Crown size={16} style={{ color: 'var(--color-accent)' }} />
+              <span className="text-sm font-semibold" style={{ color: 'var(--color-accent)' }}>Free Plan</span>
+            </div>
+            <p className="text-xs text-center" style={{ color: 'var(--color-text-secondary)' }}>
+              Up to 2 collections free<br/>
+              Premium: Unlimited collections + Sell on Marketplace<br/>
+              $5/month sellers agreement + 5% commission
+            </p>
+          </div>
         </div>
       </div>
 

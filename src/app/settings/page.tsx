@@ -11,13 +11,13 @@ import {
 } from 'lucide-react';
 
 export default function SettingsPage() {
-  const { user, signOut, isDemo } = useAuth();
+  const { user, signOut } = useAuth();
   const router = useRouter();
   const { exportData, collections } = useStore();
   
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  if (!user && !isDemo) {
+  if (!user) {
     return null;
   }
 

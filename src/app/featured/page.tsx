@@ -13,7 +13,7 @@ import {
 } from 'lucide-react';
 
 export default function FeaturedPage() {
-  const { user, isDemo } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { collections, items, isPremium, getTotalValue } = useStore();
   
@@ -21,7 +21,7 @@ export default function FeaturedPage() {
 
   const premium = isPremium();
 
-  if (!user && !isDemo) {
+  if (!user) {
     return null;
   }
 

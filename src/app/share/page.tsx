@@ -12,14 +12,14 @@ import {
 } from 'lucide-react';
 
 export default function SharePage() {
-  const { user, isDemo } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { collections, items, userProfile, getTotalValue, isPremium } = useStore();
   
   const [copied, setCopied] = useState(false);
   const [connectedSocial, setConnectedSocial] = useState<string | null>(null);
 
-  if (!user && !isDemo) {
+  if (!user) {
     return null;
   }
 

@@ -13,11 +13,11 @@ import {
 } from 'lucide-react';
 
 export default function CollectionsPage() {
-  const { user, isDemo } = useAuth();
+  const { user } = useAuth();
   const router = useRouter();
   const { 
     collections, items, addCollection, deleteCollection, 
-    addItem, updateItem, deleteItem, getItemsByCollection, isPremium 
+    addItem, updateItem, deleteItem, getItemsByCollection, isPremium, canAddCollection
   } = useStore();
 
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -32,16 +32,17 @@ export default function CollectionsPage() {
     isForSale: false, salePrice: 0, categoryAttributes: {} as Record<string, string>
   });
 
-  if (!user && !isDemo) {
+  if (!user) {
     return null;
   }
 
   const premium = isPremium();
+  const canAdd = canAddCollection();
 
   const handleCreateCollection = () => {
-    if (newCollection.name) {
+    if (newCollection.name && canAdd) {
       addCollection({
-        userId: user?.uid || 'demo',
+        userId: user?.uid || '',
         ...newCollection
       });
       setNewCollection({ name: '', type: 'stamps', description: '', coverImage: '' });
@@ -52,7 +53,7 @@ export default function CollectionsPage() {
   const handleAddItem = (collectionId: string) => {
     if (newItem.name) {
       addItem({
-        userId: user?.uid || 'demo',
+        userId: user?.uid || '',
         collectionId,
         ...newItem
       });

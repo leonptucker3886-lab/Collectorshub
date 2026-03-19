@@ -9,7 +9,7 @@ interface StoreContextType {
   wishList: WishListItem[];
   userProfile: UserProfile | null;
   notes: string;
-  addCollection: (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>) => void;
+  addCollection: (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>) => boolean;
   updateCollection: (id: string, updates: Partial<Collection>) => void;
   deleteCollection: (id: string) => void;
   addItem: (item: Omit<Item, 'id' | 'createdAt' | 'updatedAt'>) => void;
@@ -24,6 +24,8 @@ interface StoreContextType {
   getTotalValue: () => number;
   getTotalItems: () => number;
   isPremium: () => boolean;
+  canAddCollection: () => boolean;
+  canSell: () => boolean;
   exportData: () => string;
 }
 
@@ -60,7 +62,10 @@ export function StoreProvider({ children }: { children: ReactNode }) {
     localStorage.setItem('collectorVault_data', JSON.stringify(data));
   }, [collections, items, wishList, userProfile, notes]);
 
-  const addCollection = (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>) => {
+  const addCollection = (collection: Omit<Collection, 'id' | 'itemCount' | 'totalValue' | 'createdAt' | 'updatedAt'>): boolean => {
+    if (!canAddCollection()) {
+      return false;
+    }
     const newCollection: Collection = {
       ...collection,
       id: generateId(),
@@ -70,6 +75,7 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       updatedAt: new Date(),
     };
     setCollections(prev => [...prev, newCollection]);
+    return true;
   };
 
   const updateCollection = (id: string, updates: Partial<Collection>) => {
@@ -160,6 +166,9 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       photoURL: '',
       isAnonymous: false,
       isPremium: false,
+      isSeller: false,
+      sellerAgreementAccepted: false,
+      sellerSince: null,
       createdAt: new Date(),
       insuranceInfo: {
         policyNumber: '',
@@ -192,7 +201,16 @@ export function StoreProvider({ children }: { children: ReactNode }) {
   };
 
   const isPremium = () => {
-    return collections.length > 2;
+    return userProfile?.isPremium || false;
+  };
+
+  const canAddCollection = () => {
+    if (userProfile?.isPremium) return true;
+    return collections.length < 2;
+  };
+
+  const canSell = (): boolean => {
+    return !!(userProfile?.isPremium && userProfile?.isSeller && userProfile?.sellerAgreementAccepted);
   };
 
   const exportData = () => {
@@ -221,6 +239,8 @@ export function StoreProvider({ children }: { children: ReactNode }) {
       getTotalValue,
       getTotalItems,
       isPremium,
+      canAddCollection,
+      canSell,
       exportData
     }}>
       {children}

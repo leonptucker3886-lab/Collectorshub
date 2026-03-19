@@ -13,7 +13,7 @@ import {
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 export default function ProfilePage() {
-  const { user, signOut, isDemo } = useAuth();
+  const { user, signOut } = useAuth();
   const router = useRouter();
   const {
     collections, items, wishList, notes, userProfile,
@@ -42,10 +42,10 @@ export default function ProfilePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (!user && !isDemo) {
+    if (!user) {
       router.push('/login');
     }
-  }, [user, isDemo, router]);
+  }, [user, router]);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -108,7 +108,7 @@ export default function ProfilePage() {
     value: c.totalValue
   }));
 
-  if (!user && !isDemo) {
+  if (!user) {
     return null;
   }
 

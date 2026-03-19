@@ -60,6 +60,9 @@ export interface UserProfile {
   photoURL: string;
   isAnonymous: boolean;
   isPremium: boolean;
+  isSeller: boolean;
+  sellerAgreementAccepted: boolean;
+  sellerSince: Date | null;
   createdAt: Date;
   insuranceInfo: InsuranceInfo;
 }
