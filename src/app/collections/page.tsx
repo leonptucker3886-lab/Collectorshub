@@ -31,6 +31,7 @@ export default function CollectionsPage() {
     condition: 'good' as const, dateAcquired: '', serialNumber: '', certificate: '', location: '', notes: '',
     isForSale: false, salePrice: 0, categoryAttributes: {} as Record<string, string>
   });
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   if (!user) {
     return null;
@@ -51,6 +52,27 @@ export default function CollectionsPage() {
       setNewCollection({ name: '', type: 'stamps', description: '', coverImage: '' });
       setShowAddCollection(false);
     }
+  };
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setUploadingImage(true);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64 = reader.result as string;
+        setNewItem(prev => ({ ...prev, photos: [...prev.photos, base64] }));
+        setUploadingImage(false);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleRemoveImage = (index: number) => {
+    setNewItem(prev => ({
+      ...prev,
+      photos: prev.photos.filter((_, i) => i !== index)
+    }));
   };
 
   const handleAddItem = (collectionId: string) => {
@@ -400,6 +422,35 @@ export default function CollectionsPage() {
                   className="input"
                   placeholder="Item name"
                 />
+              </div>
+
+              <div>
+                <label className="label">Photos</label>
+                <div className="space-y-2">
+                  {newItem.photos.length > 0 && (
+                    <div className="flex gap-2 flex-wrap">
+                      {newItem.photos.map((photo, idx) => (
+                        <div key={idx} className="relative">
+                          <img src={photo} alt="" className="w-20 h-20 object-cover rounded-lg" />
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveImage(idx)}
+                            className="absolute -top-2 -right-2 w-6 h-6 rounded-full flex items-center justify-center text-white"
+                            style={{ background: 'var(--color-error)' }}
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <label className="flex items-center justify-center gap-2 p-4 rounded-lg cursor-pointer border-2 border-dashed" style={{ borderColor: 'var(--color-border)' }}>
+                    <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                    <span style={{ color: 'var(--color-text-secondary)' }}>
+                      {uploadingImage ? 'Uploading...' : '+ Add Photo'}
+                    </span>
+                  </label>
+                </div>
               </div>
 
               <div>
